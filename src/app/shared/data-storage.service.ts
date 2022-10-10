@@ -6,9 +6,15 @@ import { AuthService } from "../auth/auth.service";
 import { Recipe } from "../recipes/recipe.model";
 import { RecipeService } from "../recipes/recipe.service";
 
+interface UserData{
+  email:string;
+  password:string;
+}
 @Injectable()
 export class DataStorageService{
-  constructor(private http:HttpClient,private recipeService:RecipeService,private authService:AuthService){}
+  
+
+  constructor(private http:HttpClient,private recipeService:RecipeService){}
 
   storeRecipes(){
     const recipes=this.recipeService.getRecipes();
@@ -29,6 +35,17 @@ export class DataStorageService{
     tap(recipes=>{
       this.recipeService.setRecipes(recipes);
     }));
+  }
+
+  public storeUserDate(email:string,password:string){
+    const userData:UserData={
+      email:email,
+      password:password
+    }
+    this.http.post('https://ng-recipebook-a7141-default-rtdb.asia-southeast1.firebasedatabase.app/users.json',userData)
+    .subscribe(response=>{
+      console.log(response);
+    });
   }
 
 }

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { DataStorageService } from '../shared/data-storage.service';
 
 import { User } from './user.model';
 
@@ -21,9 +22,10 @@ export class AuthService {
   user = new BehaviorSubject<User>(null);
   private tokenExpirationTimer:any;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router,private dataStorageService:DataStorageService) {}
 
   signUp(email: string, password: string) {
+    
     return this.http
       .post<AuthResponse>(
         'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAcUYx9TqsLWd7TZnZ9LS53tCbp8Ccnw6M',
@@ -42,6 +44,7 @@ export class AuthService {
             resData.idToken,
             +resData.expiresIn
           );
+          this.dataStorageService.storeUserDate(email,password);
         })
       );
   }
@@ -65,6 +68,7 @@ export class AuthService {
             resData.idToken,
             +resData.expiresIn
           );
+          this.dataStorageService.storeUserDate(email,password);
         })
       );
   }

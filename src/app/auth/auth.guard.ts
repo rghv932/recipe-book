@@ -6,6 +6,7 @@ import {
   UrlTree,
 } from '@angular/router';
 import { Injectable } from '@angular/core';
+
 import { Observable } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 
@@ -35,4 +36,3 @@ export class AuthGuard implements CanActivate {
       );
   }
 }
-

@@ -18,6 +18,7 @@ export class AuthInterceptorService implements HttpInterceptor{
           params: new HttpParams().set('auth', user.token)
         });
         return next.handle(modifiedReq);
-      }));
+      })
+    );
   }
 }

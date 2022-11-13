@@ -13,7 +13,7 @@ import { ShoppingListService } from './shopping-list.service';
 })
 export class ShoppingListComponent implements OnInit, OnDestroy {
   private iSubs: Subscription;
-  ingrediants: Observable<{ ingrediants:Ingrediant[] }>;
+  ingrediants: Observable<{ ingrediants: Ingrediant[] }>;
 
   constructor(
     private shoppingService: ShoppingListService,

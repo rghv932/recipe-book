@@ -4,9 +4,9 @@ import { Subject } from "rxjs";
 import { Store } from "@ngrx/store";
 
 import { Ingrediant } from "../shared/ingrediant.model";
-import { ShoppingListService } from "../shopping-list/shopping-list.service";
 import { Recipe } from "./recipe.model";
 import * as ShoppingListActions from "../shopping-list/store/shopping-list.actions";
+import * as fromShoppingList from '../shopping-list/store/shopping-list.reducer';
 
 @Injectable()
 export class RecipeService{
@@ -17,7 +17,7 @@ export class RecipeService{
     new Recipe('A Test Recipe','test','https://cdn.pixabay.com/photo/2016/06/15/19/09/food-1459693_960_720.jpg',[new Ingrediant('tomato',2),new Ingrediant('potato',3)]),
     new Recipe('Chinese Noodles','Just a delicious one!!','https://i1.wp.com/pixahive.com/wp-content/uploads/2020/09/Chinese-Noodles-25786-pixahive.jpg?fit=778%2C1151&ssl=1',[new Ingrediant('Spaghetti',5),new Ingrediant('Carrot',10)])
   ];
-  constructor(private slService:ShoppingListService, private store: Store<{shoppingList: {ingrediants: Ingrediant[]}}>){}
+  constructor(private store: Store<fromShoppingList.AppState>){}
 
   getRecipes = () => this.recipes.slice();
 

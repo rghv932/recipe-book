@@ -1,14 +1,26 @@
 import { Ingrediant } from "../../shared/ingrediant.model";
 import * as ShoppingListActions from "./shopping-list.actions";
 
-const initialState = {
+export interface State{
+  ingrediants: Ingrediant[];
+  editedIngrediant: Ingrediant;
+  editedIngrediantIndex: number;
+};
+
+export interface AppState{
+  shoppingList: State;
+};
+
+const initialState: State = {
   ingrediants: [
     new Ingrediant('Apples', 5),
     new Ingrediant('Tomatoes', 10),
-  ]
+  ],
+  editedIngrediant: null,
+  editedIngrediantIndex: -1
 };
 
-export function shoppingListReducer(state = initialState, action: ShoppingListActions.ShoppingListActions) {
+export function shoppingListReducer(state: State = initialState, action: ShoppingListActions.ShoppingListActions) {
   switch(action.type){
 
     case ShoppingListActions.ADD_INGREDIANT:
@@ -24,25 +36,41 @@ export function shoppingListReducer(state = initialState, action: ShoppingListAc
       };
 
     case ShoppingListActions.UPDATE_INGREDIANT:
-      const ingrediant = state.ingrediants[action.payload.index];
+      const ingrediant = state.ingrediants[state.editedIngrediantIndex];
       const updatedIngrediant = {
         ...ingrediant,
-        ...action.payload.ingrediant
+        ...action.payload
       };
       const updatedIngrediants = [...state.ingrediants];
-      updatedIngrediants[action.payload.index] = updatedIngrediant;
+      updatedIngrediants[state.editedIngrediantIndex] = updatedIngrediant;
 
       return {
         ...state,
-        ingrediants: updatedIngrediants
+        ingrediants: updatedIngrediants,
+        editedIngrediantIndex: -1,
+        editedIngrediant: null
       };
 
     case ShoppingListActions.DELETE_INGREDIANT:
       return {
         ...state,
         ingrediants: state.ingrediants.filter((ig, igIndex) => {
-          return igIndex !== action.payload;
+          return igIndex !== state.editedIngrediantIndex;
         })
+      };
+    
+    case ShoppingListActions.START_EDIT:
+      return {
+        ...state,
+        editedIngrediantIndex: action.payload,
+        editedIngrediant: {...state.ingrediants[action.payload]}
+      };
+
+    case ShoppingListActions.STOP_EDIT:
+      return {
+        ...state,
+        editedIngrediant: null,
+        editedIngrediantIndex: -1
       };
 
     default:
